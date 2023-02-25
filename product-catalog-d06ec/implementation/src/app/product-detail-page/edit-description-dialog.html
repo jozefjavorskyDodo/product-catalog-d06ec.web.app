@@ -1,0 +1,11 @@
+<div mat-dialog-content>
+    <mat-form-field appearance="fill">
+        <mat-label>edited_description</mat-label>
+        <input matInput [(ngModel)]="data.edited_description">
+    </mat-form-field>
+</div>
+
+<div mat-dialog-actions>
+    <button mat-button (click)="onNoClick()">No Thanks</button>
+    <button mat-button [mat-dialog-close]="data.edited_description" cdkFocusInitial>Ok</button>
+</div>

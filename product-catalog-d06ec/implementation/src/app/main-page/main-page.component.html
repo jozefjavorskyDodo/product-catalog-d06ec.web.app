@@ -1,0 +1,165 @@
+<mat-selection-list [multiple]="false">
+    <mat-list-option selected (click)="render_state_all_products()">
+        All Products
+    </mat-list-option>
+    <mat-list-option (click)="render_state_category_1()">
+        Category 1
+    </mat-list-option>
+    <mat-list-option (click)="render_state_category_2()">
+        Category 2
+    </mat-list-option>
+    <mat-list-option (click)="render_state_category_2_1()">
+        &nbsp;&nbsp;&nbsp;&nbsp;Category 2.1
+    </mat-list-option>
+    <mat-list-option (click)="render_state_category_2_2()">
+        &nbsp;&nbsp;&nbsp;&nbsp;Category 2.2
+    </mat-list-option>
+    <mat-list-option (click)="render_state_category_2_2_1()">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Category 2.2.1
+    </mat-list-option>
+    <mat-list-option (click)="render_state_category_3()">
+        Category 3
+    </mat-list-option>
+    <mat-list-option (click)="render_state_category_4()">
+        Category 4
+    </mat-list-option>
+</mat-selection-list>
+
+<div id="pseudo-header">
+    <button mat-stroked-button class="disabledBttn" disabled></button>
+    <button mat-stroked-button class="sortBttn" onclick="javascript:
+    'use strict';
+    try {
+        let node_products = [...document.querySelectorAll('.productContainer')];
+        if (node_products.length >= 2) {
+            let arr_of_strings_to_sort = [];
+            let sorted_arr = [];
+            for (let item in node_products) {
+                arr_of_strings_to_sort.push(
+                    String(node_products[item].childNodes[0].childNodes[0].innerText) +
+                    '~~~' +
+                    String(node_products[item].childNodes[0].childNodes[0].getAttribute('href')) +
+                    '~~~' +
+                    String(node_products[item].childNodes[2].getAttribute('src')) +
+                    '~~~' +
+                    String(node_products[item].childNodes[3].innerText)
+                    );
+            };
+            sorted_arr = [...arr_of_strings_to_sort].sort();
+            for (let sub in node_products) {
+                node_products[sub].childNodes[0].childNodes[0].setAttribute('href', sorted_arr[sub].split('~~~')[1]);
+                node_products[sub].childNodes[0].childNodes[0].innerText = sorted_arr[sub].split('~~~')[0];
+                node_products[sub].childNodes[2].setAttribute('src', sorted_arr[sub].split('~~~')[2]);
+                node_products[sub].childNodes[3].innerText = sorted_arr[sub].split('~~~')[3];
+            };
+        };
+    } catch (err) {
+        if (err) {
+            console.clear();
+            console.log(err);
+        };  
+    };
+    ">[sort by name]</button>
+    <button mat-stroked-button class="sortBttn" onclick="javascript:
+    'use strict';
+    try {
+        let _node_prdcts = [...document.querySelectorAll('.productContainer')];
+        if (_node_prdcts.length >= 2) {
+            let arr_of_keys = [];
+            let arr_of_vals = [];
+            let obj_merge_of_arrs = {};
+            let arr_of_sorted_by_price = [];
+            let reduced_price_sorted_output = [];
+            for (let _item_ in _node_prdcts) {
+                arr_of_keys.push(
+                    String(_node_prdcts[_item_].childNodes[0].childNodes[0].innerText) +
+                    '~~~' +
+                    String(_node_prdcts[_item_].childNodes[0].childNodes[0].getAttribute('href')) +
+                    '~~~' +
+                    String(_node_prdcts[_item_].childNodes[2].getAttribute('src')) +
+                    '~~~' +
+                    String(_node_prdcts[_item_].childNodes[3].innerText)
+                    );
+            };
+            for (let _ytem_ in _node_prdcts) {
+                arr_of_vals.push(
+                    Number(String(_node_prdcts[_ytem_].childNodes[3].innerText.split('$')[1].split('.')[0]))
+                );
+            };
+            arr_of_keys.forEach((k, v) => obj_merge_of_arrs[k] = arr_of_vals[v]);
+            arr_of_sorted_by_price = Object.entries(obj_merge_of_arrs).sort(([,p],[,n]) => p - n);
+            for (let subitem in arr_of_sorted_by_price) {
+                reduced_price_sorted_output.push(arr_of_sorted_by_price[subitem][0]);
+            };
+            reduced_price_sorted_output = [...reduced_price_sorted_output];
+            for (let indx_yterator in _node_prdcts) {
+                _node_prdcts[indx_yterator].childNodes[0].childNodes[0].setAttribute('href', reduced_price_sorted_output[indx_yterator].split('~~~')[1]);
+                _node_prdcts[indx_yterator].childNodes[0].childNodes[0].innerText = reduced_price_sorted_output[indx_yterator].split('~~~')[0];
+                _node_prdcts[indx_yterator].childNodes[2].setAttribute('src', reduced_price_sorted_output[indx_yterator].split('~~~')[2]);
+                _node_prdcts[indx_yterator].childNodes[3].innerText = reduced_price_sorted_output[indx_yterator].split('~~~')[3];
+            };
+        };
+    } catch (err) {
+        if (err) {
+            console.clear();
+            console.log(err);
+        };
+    };
+    ">[sort by price]</button>
+    <button mat-stroked-button class="disabledBttn" disabled></button>
+</div>
+
+<br>
+
+<div id="pseudo-container">
+    <mat-grid-list cols="2" rowHeight="3:2">
+        <div *ngFor="let product of all_products$">
+            <div *ngIf="(category$ | async) === (product['categoryId'])">
+                <mat-grid-tile class="greenRectangle">
+                    <div class="productContainer">
+                        <p>
+                            <a mat-raised-button [href]="'product/'+(product.id)" target="_blank"
+                                class="productRedirect">{{product["name"]}}</a>
+                        </p>
+                        <button mat-mini-fab color="warn" class="removeBttn" onclick="javascript:
+                            'use strict';
+                            try {
+                                this.parentElement.remove();
+                            } catch (err) {
+                                if (err) {
+                                    console.clear();
+                                    console.log(err);
+                                };
+                            };
+                            ">X</button>
+                        <img class="productImg" [src]="(product['image'])">
+                        <p>{{product["price"] | currency}}</p>
+                    </div>
+                </mat-grid-tile>
+            </div>
+            <div *ngIf="(category$ | async) === ('')">
+                <mat-grid-tile class="greenRectangle">
+                    <div class="productContainer">
+                        <p>
+                            <a mat-raised-button [href]="'product/'+(product.id)" target="_blank"
+                                class="productRedirect">{{product["name"]}}</a>
+                        </p>
+                        <button mat-mini-fab color="warn" class="removeBttn" onclick="javascript:
+                            'use strict';
+                            try {
+                                this.parentElement.remove();
+                            } catch (err) {
+                                if (err) {
+                                    console.clear();
+                                    console.log(err);
+                                };
+                            };
+                            ">X</button>
+                        <img class="productImg" [src]="(product['image'])">
+                        <p>{{product["price"] | currency}}</p>
+                    </div>
+                </mat-grid-tile>
+            </div>
+        </div>
+    </mat-grid-list>
+</div>

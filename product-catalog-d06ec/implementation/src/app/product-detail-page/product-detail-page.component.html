@@ -1,0 +1,43 @@
+<div id="card-container">
+    <div *ngFor="let prdct of prdcts$">
+        <div *ngIf="prdct.id === id_of_selected_product">
+            <mat-card class="productCard">
+                <mat-card-header>
+                    <mat-card-title-group>
+                        <mat-card-title *ngIf="edited_name; else DefaultPrdctName">
+                            {{edited_name}}
+                        </mat-card-title>
+                        <ng-template #DefaultPrdctName>
+                            <mat-card-title>{{prdct.name}}</mat-card-title>
+                        </ng-template>
+                        <mat-card-subtitle *ngIf="edited_price; else DefaultPrdctPrice">
+                            {{edited_price | currency}}
+                        </mat-card-subtitle>
+                        <ng-template #DefaultPrdctPrice>
+                            <mat-card-subtitle>{{prdct.price | currency}}</mat-card-subtitle>
+                        </ng-template>
+                        <img mat-card-xl-image [src]="(prdct['image'])">
+                    </mat-card-title-group>
+                </mat-card-header>
+                <mat-card-content *ngIf="edited_description; else DefaultPrdctDescription">
+                    {{edited_description}}
+                </mat-card-content>
+                <ng-template #DefaultPrdctDescription>
+                    <mat-card-content>{{prdct.description}}</mat-card-content>
+                </ng-template>
+            </mat-card>
+        </div>
+    </div>
+</div>
+
+<ul>
+    <li>
+        <button mat-raised-button class="editBttn" (click)="openDialog_edit_name()">edit name</button>
+    </li>
+    <li>
+        <button mat-raised-button class="editBttn" (click)="openDialog_edit_price()">edit price</button>
+    </li>
+    <li>
+        <button mat-raised-button class="editBttn" (click)="openDialog_edit_description()">edit description</button>
+    </li>
+</ul>
