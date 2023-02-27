@@ -11,7 +11,7 @@ export class ProductsService {
 
     getProducts(): Observable<JSON> {
         return this.http
-            .get<JSON>("https://xxx-xxxx.yy.zz-zzzz-z.amazonaws.com/products.json")
+            .get<JSON>("https://xxx-xxxx.yy.yy-zzzz-z.amazonaws.com/products.json")
     }
 
 }
